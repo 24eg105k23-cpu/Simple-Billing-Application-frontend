@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-const API = "http://localhost:8080/api/products";
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080"
+).replace(/\/+$/, "");
+const API = `${API_BASE_URL}/api/products`;
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -24,7 +27,7 @@ function App() {
         setProducts(data);
       })
       .catch(() => {
-        setMessage("Cannot connect to backend. Start Spring Boot first.");
+        setMessage("Cannot connect to the backend. Check the API URL and backend availability.");
       });
   }, []);
 

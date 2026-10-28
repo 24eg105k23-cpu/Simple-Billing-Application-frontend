@@ -1,16 +1,36 @@
-# React + Vite
+# Simple Billing Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend built with Vite. The app requests products from the Spring Boot backend at `/api/products`.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev
+```
 
-## React Compiler
+By default, the frontend uses `http://localhost:8080` as its backend URL. To use a different backend, create a `.env` file in the frontend root:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```env
+VITE_API_BASE_URL=https://your-backend.example.com
+```
 
-## Expanding the ESLint configuration
+Set the value to the backend origin only (no `/api/products` path).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Deploy to Vercel
+
+1. Import the frontend's Git repository into Vercel. The repository root is the Vercel project root.
+2. Keep the Vite defaults: build command `npm run build` and output directory `dist`.
+3. Add `VITE_API_BASE_URL` in the Vercel project's Environment Variables, using the deployed Spring Boot backend's public origin (for example, `https://your-backend.example.com`). Set it for the environments you deploy.
+4. Redeploy after adding or changing the environment variable.
+
+`vercel.json` configures the SPA fallback so direct visits and page refreshes serve the Vite app.
+
+The backend must be publicly reachable over HTTPS and configured to allow the deployed Vercel frontend origin via CORS. The backend currently allows only `http://localhost:5173`; update its CORS configuration to include your Vercel production domain (and preview domains if needed) before the deployed frontend can load products. Do not put credentials or secrets in `VITE_` variables because they are included in browser code.
+
+## Scripts
+
+- `npm run dev` — start the local development server
+- `npm run build` — create the production build in `dist`
+- `npm run preview` — preview the production build locally
+- `npm run lint` — run ESLint
